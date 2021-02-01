@@ -1,5 +1,5 @@
 ---
-  - name: Configure odoo
+  - name: Install, Configure ElasticSearch, Kibana and NodeJS
     hosts: 127.0.0.1
     connection: local
     gather_facts: true
