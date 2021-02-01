@@ -1,8 +1,8 @@
 ---
 prerequirements_packages:
-  - apt-transport-https=1.8.2.2
-  - gnupg2=2.2.12-1+deb10u1
-  - openjdk-11-jdk=11.0.9.1+1-1~deb10u2 
+  - apt-transport-https
+  - gnupg2
+  - openjdk-11-jdk
 
 repository_key:
   filebeat:
@@ -14,4 +14,4 @@ repositorys:
 
 
 required_packages:
-   - kibana=7.9.3
+   - kibana
