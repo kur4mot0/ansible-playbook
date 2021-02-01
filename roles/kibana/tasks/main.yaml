@@ -1,0 +1,76 @@
+---
+  - name: Install Packages
+    apt:
+      force: yes
+      update_cache: yes                
+      name: "{{ prerequirements_packages }}" 
+      autoclean: yes 
+      purge: yes
+      state: present        
+      install_recommends: yes
+      
+  - name: Add an Apt signing key, uses whichever key is at the URL
+    apt_key:
+      url: "{{ item.value.url }}"
+      state: present
+    with_dict:
+      - "{{ repository_key }}"
+
+  - name: Add specified repository into sources list using specified filename
+    apt_repository:
+      repo: "{{ item.value.repository }}"
+      state: present
+    with_dict:
+      - "{{ repositorys }}"
+  
+  - name: Install Packages
+    apt:
+      force: yes
+      update_cache: yes                
+      name: "{{ required_packages }}" 
+      autoclean: yes 
+      purge: yes
+      state: present        
+      install_recommends: yes
+
+  - name: Configure ElasticSearch - bootstrap.memory_lock
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: ^#server.port
+      line: "server.port: 5601"
+    notify: reboot-kibana
+
+  - name: Configure ElasticSearch - network.host
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: ^#server.host
+      line: "server.host: 0.0.0.0"
+    notify: reboot-kibana
+  
+  - name: Configure ElasticSearch - http.port
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: ^#server.name
+      line: "server.name: {{ inventory_hostname }}"
+    notify: reboot-kibana
+
+  - name: Configure ElasticSearch - cluster.name
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: ^#elasticsearch.hosts
+      line: 'elasticsearch.hosts: ["http://127.0.0.1:9200"]'
+    notify: reboot-kibana
+
+  - name: Configure ElasticSearch - node.name
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: ^#elasticsearch.username
+      line: "elasticsearch.username: kibana"
+    notify: reboot-kibana    
+
+  - name: Configure ElasticSearch - node.name
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: ^#elasticsearch.password
+      line: "elasticsearch.password: XWuUD31OLIk5sDUEgsU21bDpFmbkxZQdnIxxXYIUC+M="
+    notify: reboot-kibana    

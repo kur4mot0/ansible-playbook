@@ -1,0 +1,13 @@
+---
+prerequirements_packages:
+  - apt-transport-https=1.8.2.2
+  - gnupg2=2.2.12-1+deb10u1
+  - curl=7.64.0-4+deb10u1
+
+repository_key:
+  nodejs:
+    url: https://deb.nodesource.com/setup_15.x
+
+
+required_packages:   
+   - nodejs

@@ -1,0 +1,6 @@
+---
+  - name: Reboot-elasticsearch
+    service:
+      name: elasticsearch
+      enabled: true
+      state: started

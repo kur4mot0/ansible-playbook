@@ -1,0 +1,17 @@
+---
+prerequirements_packages:
+  - apt-transport-https=1.8.2.2
+  - gnupg2=2.2.12-1+deb10u1
+  - openjdk-11-jdk=11.0.9.1+1-1~deb10u2 
+
+repository_key:
+  filebeat:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+repositorys:
+  elasticsearch:
+    repository: deb https://artifacts.elastic.co/packages/7.x/apt stable main  
+
+
+required_packages:
+   - kibana=7.9.3

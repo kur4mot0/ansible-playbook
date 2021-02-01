@@ -1,0 +1,16 @@
+---
+  - name: Configure odoo
+    hosts: 127.0.0.1
+    connection: local
+    gather_facts: true
+    become: yes
+    become_method: su
+    become_user: root
+
+    roles:
+      - role: elasticsearch
+        tags: elasticsearch
+      - role: kibana
+        tags: kibana
+      - role: nodejs
+        tags: nodejs

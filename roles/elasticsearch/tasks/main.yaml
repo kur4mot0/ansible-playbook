@@ -1,0 +1,77 @@
+---
+  - name: Install Packages
+    apt:
+      force: yes
+      update_cache: yes                
+      name: "{{ prerequirements_packages }}" 
+      autoclean: yes 
+      purge: yes
+      state: present        
+      install_recommends: yes
+      
+  - name: Add an Apt signing key, uses whichever key is at the URL
+    apt_key:
+      url: "{{ item.value.url }}"
+      state: present
+    with_dict:
+      - "{{ repository_key }}"
+
+  - name: Add specified repository into sources list using specified filename
+    apt_repository:
+      repo: "{{ item.value.repository }}"
+      state: present
+    with_dict:
+      - "{{ repositorys }}"
+  
+  - name: Install Packages
+    apt:
+      force: yes
+      update_cache: yes                
+      name: "{{ required_packages }}" 
+      autoclean: yes 
+      purge: yes
+      state: present        
+      install_recommends: yes
+
+  - name: Configure ElasticSearch - bootstrap.memory_lock
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: "bootstrap.memory_lock: .*?.*"
+      line: "bootstrap.memory_lock: false"
+    notify: Reboot-elasticsearch
+
+  - name: Configure ElasticSearch - network.host
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: 'network.host: .*?.*'
+      line: "network.host: 0.0.0.0"
+    notify: Reboot-elasticsearch
+  
+  - name: Configure ElasticSearch - http.port
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: 'http.port: .*?.*'
+      line: "http.port: 9200"
+    notify: Reboot-elasticsearch
+
+  - name: Configure ElasticSearch - cluster.name
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: 'cluster.name: .*?.*'
+      line: "cluster.name: {{ inventory_hostname }}2"
+    notify: Reboot-elasticsearch
+
+  - name: Configure ElasticSearch - node.name
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: 'node.name: .*?.*'
+      line: "node.name: node-01"
+    notify: Reboot-elasticsearch
+
+  - name: Configure ElasticSearch - node.name
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: 'cluster.initial_master_nodes: .*?.*'
+      line: "cluster.initial_master_nodes: ['node-01']"
+    notify: Reboot-elasticsearch    
+    
